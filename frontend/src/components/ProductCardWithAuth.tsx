@@ -17,7 +17,7 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  category: string;
+  category: { _id: string; name: string } | string;
   images: string[];
   stock: number;
   slug?: string; // ajout du slug
@@ -170,7 +170,11 @@ export const ProductCardWithAuth = ({
             transition={{ delay: 0.15 }}
             className="absolute bottom-3 left-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-3 py-1.5 rounded-full text-xs font-bold"
           >
-            {product.category}
+            {typeof product.category === "object" && product.category !== null
+              ? product.category.name
+              : typeof product.category === "string"
+              ? product.category
+              : "Uncategorized"}
           </motion.div>
         </div>
 

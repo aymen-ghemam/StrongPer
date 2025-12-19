@@ -19,7 +19,7 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  category: string;
+  category: { _id: string; name: string } | string;
   images: string[];
   stock: number;
   status: string;
@@ -231,7 +231,12 @@ const ProductDetailsAPI = () => {
                 {/* Category Badge */}
                 <div className="inline-block mb-6">
                   <span className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-xs font-bold py-2 px-4 rounded-full">
-                    {product.category}
+                    {typeof product.category === "object" &&
+                    product.category !== null
+                      ? product.category.name
+                      : typeof product.category === "string"
+                      ? product.category
+                      : "Uncategorized"}
                   </span>
                 </div>
 

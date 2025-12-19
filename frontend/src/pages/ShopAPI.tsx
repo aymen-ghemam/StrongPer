@@ -48,7 +48,7 @@ const ShopAPI = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await api.get("/admin/categories");
+        const response = await api.get("/categories");
         setCategories(response.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -195,9 +195,12 @@ const ShopAPI = () => {
               >
                 {products.map((product, index) => {
                   const categoryName =
-                    typeof product.category === "object"
+                    typeof product.category === "object" &&
+                    product.category !== null
                       ? product.category.name
-                      : product.category;
+                      : typeof product.category === "string"
+                      ? product.category
+                      : "Uncategorized";
 
                   return (
                     <motion.a

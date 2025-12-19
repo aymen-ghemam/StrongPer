@@ -30,8 +30,8 @@ const ProfilePage = () => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        const response = await api.get("/api/orders/user");
-        setOrders(response.data || []);
+        const response = await api.get("/orders/my");
+        setOrders(response.data.data?.orders || []);
       } catch (err) {
         console.error("Error fetching orders:", err);
         setError("Failed to load order history");
