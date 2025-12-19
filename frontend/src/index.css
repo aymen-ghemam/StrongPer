@@ -1,0 +1,64 @@
+/* src/index.css */
+
+/* Import classic sans-serif Google font: Roboto */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+/* Tailwind imports */
+@import "tailwindcss";
+
+body {
+  font-family: "Roboto", sans-serif; /* Classic corporate font for entire site */
+}
+
+/* Custom Utilities */
+@layer utilities {
+  /* Gradient background */
+  .bg-main-gradient {
+    background: linear-gradient(
+      to bottom right,
+      #0a1a44,
+      #1e40af,
+      #3b82f6,
+      #60a5fa
+    );
+  }
+
+  /* Card shadow */
+  .card-shadow {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Hover grow effect */
+  .hover-grow {
+    transition: transform 0.2s ease;
+  }
+  .hover-grow:hover {
+    transform: scale(1.05);
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Fade-in animation */
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
