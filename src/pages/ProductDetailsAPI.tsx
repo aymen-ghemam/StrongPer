@@ -136,6 +136,7 @@ const ProductDetailsAPI = () => {
   const handleAddToCart = () => {
     addToCart({
       index: 0,
+      productId: product._id,
       name: product.name,
       price: product.price,
       image: product.images[0] || "https://via.placeholder.com/300",
@@ -235,8 +236,8 @@ const ProductDetailsAPI = () => {
                     product.category !== null
                       ? product.category.name
                       : typeof product.category === "string"
-                      ? product.category
-                      : "Uncategorized"}
+                        ? product.category
+                        : "Uncategorized"}
                   </span>
                 </div>
 
@@ -321,8 +322,8 @@ const ProductDetailsAPI = () => {
                     addedToCart
                       ? "bg-green-600 text-white"
                       : product.stock === 0
-                      ? "bg-slate-700 text-slate-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-cyan-500/20"
+                        ? "bg-slate-700 text-slate-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-cyan-500/20"
                   }`}
                 >
                   {addedToCart ? (

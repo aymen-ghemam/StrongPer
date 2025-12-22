@@ -15,7 +15,7 @@ const SearchPage = () => {
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(query.toLowerCase()) ||
-      product.description.toLowerCase().includes(query.toLowerCase())
+      product.description.toLowerCase().includes(query.toLowerCase()),
   );
 
   const handleAddToCart = (product: (typeof products)[0]) => {
@@ -26,6 +26,7 @@ const SearchPage = () => {
     }
     addToCart({
       index: product.index,
+      productId: String(product.index), // Fallback for static data without _id
       name: product.name,
       price: product.price,
       image: product.image,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useCart } from "../hooks/useCart";
+import api from "../utils/api";
 
 interface FormData {
   firstName: string;
@@ -12,10 +13,11 @@ interface FormData {
   city: string;
   state: string;
   zipCode: string;
-  cardName: string;
-  cardNumber: string;
-  cardExpiry: string;
-  cardCVV: string;
+  // Card payment fields removed - using Cash on Delivery only
+  // cardName: string;
+  // cardNumber: string;
+  // cardExpiry: string;
+  // cardCVV: string;
 }
 
 const CheckoutPage = () => {
@@ -30,10 +32,11 @@ const CheckoutPage = () => {
     city: "",
     state: "",
     zipCode: "",
-    cardName: "",
-    cardNumber: "",
-    cardExpiry: "",
-    cardCVV: "",
+    // Card payment fields removed - using Cash on Delivery only
+    // cardName: "",
+    // cardNumber: "",
+    // cardExpiry: "",
+    // cardCVV: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -93,13 +96,14 @@ const CheckoutPage = () => {
     if (!formData.city.trim()) newErrors.city = "City is required";
     if (!formData.state.trim()) newErrors.state = "State is required";
     if (!formData.zipCode.trim()) newErrors.zipCode = "Zip code is required";
-    if (!formData.cardName.trim())
-      newErrors.cardName = "Cardholder name is required";
-    if (!formData.cardNumber.trim())
-      newErrors.cardNumber = "Card number is required";
-    if (!formData.cardExpiry.trim())
-      newErrors.cardExpiry = "Expiry date is required";
-    if (!formData.cardCVV.trim()) newErrors.cardCVV = "CVV is required";
+    // Card validation removed - using Cash on Delivery only
+    // if (!formData.cardName.trim())
+    //   newErrors.cardName = "Cardholder name is required";
+    // if (!formData.cardNumber.trim())
+    //   newErrors.cardNumber = "Card number is required";
+    // if (!formData.cardExpiry.trim())
+    //   newErrors.cardExpiry = "Expiry date is required";
+    // if (!formData.cardCVV.trim()) newErrors.cardCVV = "CVV is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -111,17 +115,15 @@ const CheckoutPage = () => {
 
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Create order object
-      const order = {
-        orderId: `ORD-${Date.now()}`,
-        date: new Date().toISOString(),
-        items: cartItems,
-        subtotal,
-        tax,
-        total,
+      // Prepare order data for backend with productId
+      const orderData = {
+        items: cartItems.map((item) => ({
+          productId: item.productId,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image,
+        })),
         shippingAddress: {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -130,19 +132,33 @@ const CheckoutPage = () => {
           state: formData.state,
           zipCode: formData.zipCode,
         },
-        status: "confirmed",
+        email: formData.email,
+        phone: formData.phone,
+        paymentMethod: "CASH_ON_DELIVERY",
+        subtotal,
+        tax,
+        total,
       };
 
-      // Save order to localStorage
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      orders.push(order);
-      localStorage.setItem("orders", JSON.stringify(orders));
+      console.log("orderData: ", orderData);
+
+      try {
+        // Submit order to backend
+        const response = await api.post("/orders", orderData);
+        console.log("Order response:", response.data);
+      } catch (error) {
+        alert("Error submitting order to the server.");
+        return;
+      }
 
       // Clear cart
       clearCart();
 
       // Redirect to orders page
       navigate("/orders");
+    } catch (error) {
+      console.error("Order submission error:", error);
+      alert("Failed to submit order. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -326,6 +342,36 @@ const CheckoutPage = () => {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Payment Method
               </h2>
+              <div className="bg-green-50 border-2 border-green-500 rounded-lg p-6">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0">
+                    <svg
+                      className="w-6 h-6 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      Cash on Delivery
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Pay with cash when your order is delivered to your
+                      doorstep.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card payment form commented out
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Cardholder Name *
@@ -407,6 +453,7 @@ const CheckoutPage = () => {
                   )}
                 </div>
               </div>
+              */}
             </div>
 
             <button

@@ -38,7 +38,7 @@ export const ProductCardWithAuth = ({
   const [isAdded, setIsAdded] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [messageType, setMessageType] = useState<"success" | "warning">(
-    "success"
+    "success",
   );
   const [isFavorited, setIsFavorited] = useState(false);
 
@@ -71,6 +71,7 @@ export const ProductCardWithAuth = ({
 
     addToCart({
       index: Math.random(),
+      productId: product._id,
       name: product.name,
       price: product.price,
       image: product.images[0] || "/placeholder.jpg",
@@ -173,8 +174,8 @@ export const ProductCardWithAuth = ({
             {typeof product.category === "object" && product.category !== null
               ? product.category.name
               : typeof product.category === "string"
-              ? product.category
-              : "Uncategorized"}
+                ? product.category
+                : "Uncategorized"}
           </motion.div>
         </div>
 
@@ -220,8 +221,8 @@ export const ProductCardWithAuth = ({
               isAdded
                 ? "bg-green-500/20 text-green-400 border border-green-500/30"
                 : product.stock > 0
-                ? "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-cyan-500/20"
-                : "bg-slate-700/50 text-slate-500 cursor-not-allowed border border-slate-600/50"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-cyan-500/20"
+                  : "bg-slate-700/50 text-slate-500 cursor-not-allowed border border-slate-600/50"
             }`}
           >
             {isAdded ? (

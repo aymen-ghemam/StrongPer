@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 export interface CartItem {
   index: number;
+  productId: string; // MongoDB _id for backend
   name: string;
   price: number;
   image: string;
@@ -21,7 +22,7 @@ export interface CartContextType {
 }
 
 export const CartContext = createContext<CartContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
@@ -49,7 +50,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const existingItem = prevItems.find((i) => i.index === item.index);
       if (existingItem) {
         return prevItems.map((i) =>
-          i.index === item.index ? { ...i, quantity: i.quantity + 1 } : i
+          i.index === item.index ? { ...i, quantity: i.quantity + 1 } : i,
         );
       }
       return [...prevItems, { ...item, quantity: 1 }];
@@ -58,7 +59,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const removeFromCart = (index: number) => {
     setCartItems((prevItems) =>
-      prevItems.filter((item) => item.index !== index)
+      prevItems.filter((item) => item.index !== index),
     );
   };
 
@@ -68,8 +69,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setCartItems((prevItems) =>
         prevItems.map((item) =>
-          item.index === index ? { ...item, quantity } : item
-        )
+          item.index === index ? { ...item, quantity } : item,
+        ),
       );
     }
   };
@@ -81,7 +82,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const cartTotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
   const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
