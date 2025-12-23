@@ -182,7 +182,7 @@ export const ProductCardWithAuth = ({
         {/* Content Container */}
         <div className="flex-1 p-5 flex flex-col justify-between">
           <div className="mb-4">
-            <h3 className="font-bold text-lg text-white line-clamp-2 mb-2 group-hover:text-cyan-400 transition-colors">
+            <h3 className="font-bold text-lg text-blue-400 line-clamp-2 mb-2 group-hover:text-cyan-400 transition-colors">
               {product.name}
             </h3>
             <p className="text-slate-400 text-sm line-clamp-2 group-hover:text-slate-300 transition-colors">
